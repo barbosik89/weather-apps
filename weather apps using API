@@ -1,0 +1,32 @@
+import requests
+
+def get_weather(city, api_key):
+    base_url = "http://api.openweathermap.org/data/2.5/weather"
+    params = {
+        'q': city,
+        'appid': api_key,
+        'units': 'metric',
+        'lang': 'ru'
+    }
+    response = requests.get(base_url, params=params)
+    return response.json()
+
+def display_weather(data):
+    if data['cod'] == 200:
+        print(f"Погода в городе: {data['name']}")
+        print(f"Температура: {data['main']['temp']}°C")
+        print(f"Ощущается как: {data['main']['feels_like']}°C")
+        print(f"Погода: {data['weather'][0]['description']}")
+        print(f"Влажность: {data['main']['humidity']}%")
+        print(f"Скорость ветра: {data['wind']['speed']} м/с")
+    else:
+        print(f"Ошибка: {data['message']}")
+
+def main():
+    api_key = "YOUR_API_KEY"  # Замените YOUR_API_KEY на ваш API-ключ
+    city = input("Введите название города: ")
+    weather_data = get_weather(city, api_key)
+    display_weather(weather_data)
+
+if __name__ == "__main__":
+    main()
